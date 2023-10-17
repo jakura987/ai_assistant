@@ -4,14 +4,33 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');  // for displaying error messages
 
-  const handleLogin = () => {
-    console.log("Entered username:", username);
-    console.log("Entered password:", password);
-    setIsLoggedIn(true);
-    
-    if (username === 'user' && password === '123456') {
-      setIsLoggedIn(true);
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:80/admin/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userName: username, password })
+      });
+
+
+
+
+      const data = await response.json();
+
+      if (data.code === 200) {
+        setIsLoggedIn(true);
+        setErrorMessage(''); // Clear any previous error messages
+      } else {
+        setErrorMessage(data.msg);
+      }
+
+    } catch (error) {
+      console.error("There was an error logging in:", error);
+      setErrorMessage("An error occurred. Please try again.");
     }
   };
 
@@ -29,6 +48,7 @@ const Login = () => {
       ) : (
         <div>
           <h2>Login</h2>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>} {/* Display error messages */}
           <input
             type="text"
             placeholder="Username"
