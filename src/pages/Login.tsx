@@ -6,8 +6,11 @@ const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
+    console.log("Entered username:", username);
+    console.log("Entered password:", password);
+    setIsLoggedIn(true);
     
-    if (username === 'user1' && password === 'password') {
+    if (username === 'user' && password === '123456') {
       setIsLoggedIn(true);
     }
   };
